@@ -1,0 +1,84 @@
+<!-- Template page: offers three sections to visualize a 3 steps workflow.-->
+
+    {% extends "masterPage.html" %}
+
+    {% block content %}
+    <div class="row">
+            
+            <!-- Left Rail -->
+            <div class="col-xl-3 col-md-4">
+                <div class="section" >
+                    
+                </div>
+            </div>
+        
+    
+            <!-- Middle Rail -->
+            <div class="col-xl-6 col-md-4">
+                <div class="section" >
+                    <div class="panel panel--loose panel--raised base-margin-bottom">
+                        <form action="/?step=select-switch" method="post">
+                        <h6 style="margin-left:40px;margin-top:20px"><b>Step 1: Select Infrastructure</b></h6><hr>
+                        <div class="form-group base-margin-bottom" style="padding-left: 40px;padding-right: 40px;">
+                            <div class="form-group__text select" style="margin-top: 30px;">
+                                <select name="switch" value="Select device...">
+                                    <option disabled selected>Select device...</option>
+                                    {% for switch in switches %}
+                                    <option value="{{switch.instanceUuid}}">{{switch.hostname}} (IP Address: {{switch.managementIpAddress}})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn--primary"  style="margin-left: 40px;color:white;">
+                        </form>
+                    
+
+                        <form action="/?step=select-ports&switch={{selected_switch}}" method="post">
+                        <h6 style="margin-top: 40px;margin-left:40px;"><b>Step 2: Configure ports</b> &nbsp;&nbsp;<a class="btn btn--secondary" href="/?switch={{selected_switch}}">Refresh</a></h6><hr>
+                                <div class="responsive-table" style="padding-left: 40px;padding-right: 40px;">
+                                    <table class="table table--lined table">
+                                        <!-- <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Portname</th>
+                                            </tr>
+                                        </thead> -->
+                                        
+                                        <tbody>
+                                            {% for port in ports %}
+                                            <tr>
+                                                <td>{{port.portName}}</td>
+                                                <td style="text-align: center;font-style: italic;">Current: <b>{{port.template}}</b></td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="form-group__text select">
+                                                            <select name="{{port.portName}}">
+                                                                <option value="interfaces_closed">dot1X MAB</option>
+                                                                <option value="interfaces_printer">Printer</option>
+                                                                <option value="interfaces_collaboration">Collaboration</option>
+                                                                <option value="no_template" selected>No authentication template</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                        <h6 style="margin-top: 40px;margin-left:40px;"><b>Step 3: Apply template</b></h6><hr>
+                            <input type="submit" class="btn btn--primary"  style="margin-left: 40px;margin-bottom: 30px;margin-top: 10px;color:white;">
+                        </form>
+                </div>
+            </div>
+    
+        <!-- Right Rail -->
+        <div class="col-xl-3 col-md-4">
+            <div class="section" >
+                
+            </div>
+        </div>
+    </div>
+    {%  endblock %}
